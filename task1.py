@@ -8,7 +8,7 @@ def get_aspected_index(two_pair_values, target_value):
             # indexs.append(n)
         
     # return index, indexs
-    return index
+    return indexw
 
 two_pair_values = [
     [1, 5],
