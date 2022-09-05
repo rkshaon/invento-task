@@ -1,0 +1,7 @@
+Registration
+{
+    "name": "Rezaul Karim Shaon",
+    "email": "rkshaon.ist@gmail.com",
+    "username": "rkshaon",
+    "password": "rkshaon"
+}
