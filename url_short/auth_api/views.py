@@ -5,9 +5,12 @@ from rest_framework import status
 import datetime
 import jwt
 
+from url_short.utility import auth_user
+
 from auth_api.models import User
 
 from auth_api.serializers import UserSerializer
+from auth_api.serializers import UserProfileSerializer
 
 
 @api_view(['POST'])
@@ -86,3 +89,30 @@ def user_login(request):
     }
 
     return response
+
+
+@api_view(['POST'])
+def user_logout(request):
+    response = Response()
+
+    response.delete_cookie('token')
+
+    response.data = {
+        'status': True,
+        'message': 'logout success'
+    }
+
+    return response
+
+
+@api_view(['GET'])
+def user_profile(request):
+    user = auth_user(request)
+
+    user_serializer = UserProfileSerializer(user)
+    data = user_serializer.data
+
+    return Response({
+        'status': True,
+        'data': data,
+    })
