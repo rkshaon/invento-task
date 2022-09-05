@@ -5,3 +5,9 @@ Registration
     "username": "rkshaon",
     "password": "rkshaon"
 }
+
+Login
+{
+    "credential": "rkshaon.ist@gmail.com",
+    "password": "rkshaon"
+}
