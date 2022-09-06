@@ -21,9 +21,8 @@ def create_short_url(request):
     epoch_time = datetime.datetime(1900, 1, 1)
     current_time = datetime.datetime.now()
     execution_time = (current_time - epoch_time).total_seconds()
-    # print('execution-time: ', execution_time)
-
     duration = 3600
+
     url = request.data['url']
     url = url + '?exe=' + str(duration) + '&exp=' + str(execution_time)
     s = sh.Shortener()
@@ -50,6 +49,9 @@ def retrive_short_url(request):
     
     s = sh.Shortener()
     url = s.tinyurl.expand(request.data['short_url'])
+    
+    epoch_time = datetime.datetime(1900, 1, 1)
+    current_time = datetime.datetime.now()
     
     data = {
         'url': url,
