@@ -2,7 +2,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+import datetime
 import pyshorteners as sh
+
+
+# more about pyshorteners 1.0.1
+# https://pyshorteners.readthedocs.io/en/latest/
 
 
 @api_view(['POST'])
@@ -13,12 +18,20 @@ def create_short_url(request):
             'message': 'URL required to create short URL!'
         }, status=status.HTTP_400_BAD_REQUEST)
 
+    epoch_time = datetime.datetime(1900, 1, 1)
+    current_time = datetime.datetime.now()
+    execution_time = (current_time - epoch_time).total_seconds()
+    # print('execution-time: ', execution_time)
+
+    duration = 3600
+    url = request.data['url']
+    url = url + '?exe=' + str(duration) + '&exp=' + str(execution_time)
     s = sh.Shortener()
-    short_url = s.tinyurl.short(request.data['url'])
+    short_url = s.tinyurl.short(url)
 
     data = {
         'short_url': short_url,
-        'url': request.data['url']
+        'url': url,
     }
 
     return Response({
