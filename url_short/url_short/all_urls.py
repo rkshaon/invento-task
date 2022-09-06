@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout', auth_views.user_logout),
     path('profile', auth_views.user_profile),
     path('create', url_views.create_short_url),
+    path('retrive', url_views.retrive_short_url),
 ]
