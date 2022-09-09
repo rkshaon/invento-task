@@ -28,7 +28,6 @@ def create_short_url(request):
 
     if 'private' in request.data and (request.data['private'].lower() == 'true' or request.data['private'] == True):
         user = auth_user(request)
-        # print('user: ', user.id)
         private = user.id
 
     if 'custom' in request.data:
@@ -53,8 +52,6 @@ def create_short_url(request):
 
     if private is not None:
         url += '&private=' + str(private)
-    
-    # print(url)
 
     s = sh.Shortener()
 
@@ -67,7 +64,6 @@ def create_short_url(request):
 
     data = {
         'short_url': short_url,
-        'url': url,
     }
 
     return Response({
@@ -131,8 +127,6 @@ def retrive_short_url(request):
         user = auth_user(request)
 
         if str(user.id) != url_private:
-            print(type(user.id), user.id)
-            print(type(url_private), url_private)
 
             return Response({
                 'status': False,
@@ -143,7 +137,6 @@ def retrive_short_url(request):
 
     data = {
         'url': url,
-        # 'short_url': request.data['short_url'],
     }
 
     return Response({
