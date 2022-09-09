@@ -26,8 +26,6 @@ def create_short_url(request):
         duration = int(request.data['expiry'])
     else:
         duration = 3600
-    # print(type(execution_time))
-    # duration = 3600
 
     url = request.data['url']
     url = url + '?exe=' + str(duration) + '&exp=' + str(execution_time)
@@ -52,10 +50,6 @@ def retrive_short_url(request):
             'status': False,
             'message': 'Short URL is require to retrive URL!'
         }, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-
-    # print('execution-time: ', execution_time)
 
     s = sh.Shortener()
     url = s.tinyurl.expand(request.data['short_url'])
@@ -65,29 +59,18 @@ def retrive_short_url(request):
     execution_time = (current_time - epoch_time).total_seconds()
 
     url_split = url.split('?')[1].split('&')
-    # print('url-split: ', url_split)
-    # url_exeution_tim
-    # url_execution_time = url_split['exp']
     url_execution_time = None
     url_duration = None
 
     for u in url_split:
-        # print(u)
         if 'exp' in u:
-            # print(u)
             url_execution_time = float(u.split('=')[1])
         
         if 'exe' in u:
             url_duration = float(u.split('=')[1])
-    
-    # print(url_execution_time)
-    # print(url_duration)
+            
     actual_duration = execution_time - url_execution_time
-    print(actual_duration)
-    # epoch_time = datetime.datetime(1900, 1, 1)
-    # current_time = datetime.datetime.now()
-    # if execution_time -
-
+    
     if actual_duration > url_duration:
         return Response({
             'status': True,
