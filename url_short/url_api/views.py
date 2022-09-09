@@ -9,6 +9,10 @@ import pyshorteners as sh
 # more about pyshorteners 1.0.1
 # https://pyshorteners.readthedocs.io/en/latest/
 
+# Allowed custom URL
+# 1. tinyurl
+# 2. chilp.it
+# 
 
 @api_view(['POST'])
 def create_short_url(request):
@@ -17,6 +21,11 @@ def create_short_url(request):
             'status': False,
             'message': 'URL required to create short URL!'
         }, status=status.HTTP_400_BAD_REQUEST)
+
+    if 'custom' in request.data:
+        custom = request.data['custom']
+    else:
+        custom = 'tinyurl'
 
     epoch_time = datetime.datetime(1900, 1, 1)
     current_time = datetime.datetime.now()
@@ -29,12 +38,19 @@ def create_short_url(request):
 
     url = request.data['url']
     url = url + '?exe=' + str(duration) + '&exp=' + str(execution_time)
+
     s = sh.Shortener()
-    short_url = s.tinyurl.short(url)
+
+    if custom == 'tinyurl':
+        short_url = s.tinyurl.short(url)
+    elif custom == 'chilp.it':
+        short_url = s.chilpit.short(url)
+    elif custom == 'clckru':
+        short_url = s.clckru.short(url)
 
     data = {
         'short_url': short_url,
-        'url': url,
+        # 'url': url,
     }
 
     return Response({
@@ -51,8 +67,21 @@ def retrive_short_url(request):
             'message': 'Short URL is require to retrive URL!'
         }, status=status.HTTP_400_BAD_REQUEST)
 
+    if 'tinyurl' in request.data['short_url']:
+        custom = 'tinyurl'
+    elif 'chilp.it' in request.data['short_url']:
+        custom = 'chilp.it'
+    elif 'clck.ru' in request.data['short_url']:
+        custom = 'clck.ru'
+
     s = sh.Shortener()
-    url = s.tinyurl.expand(request.data['short_url'])
+
+    if custom == 'tinyurl':
+        url = s.tinyurl.expand(request.data['short_url'])
+    elif custom == 'chilp.it':
+        url = s.chilpit.expand(request.data['short_url'])
+    elif custom == 'clck.ru':
+        url = s.clckru.expand(request.data['short_url'])
     
     epoch_time = datetime.datetime(1900, 1, 1)
     current_time = datetime.datetime.now()
@@ -77,9 +106,11 @@ def retrive_short_url(request):
             'message': 'Link expired!'
         }, status=status.HTTP_410_GONE)
     
+    url = url.split('?')[0]
+
     data = {
         'url': url,
-        'short_url': request.data['short_url'],
+        # 'short_url': request.data['short_url'],
     }
 
     return Response({

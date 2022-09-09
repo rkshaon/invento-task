@@ -15,8 +15,16 @@ Login
 URL
 {
     "url": "https://www.linkedin.com/in/rkshaon/",
-    "expiry": "300"
+    "expiry": "300",
+    "custom": "clckru"
 }
+
+{
+    "url": "https://www.linkedin.com/in/rkshaon/",
+    "expiry": "300",
+    "custom": "chilp.it"
+}
+
 {
     "url": "https://www.linkedin.com/in/rkshaon/"
 }
