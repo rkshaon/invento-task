@@ -6,9 +6,21 @@ Registration
     "password": "rkshaon"
 }
 
+{
+    "name": "Rezaul Karim Shaon2",
+    "email": "rkshaon.ist2@gmail.com",
+    "username": "rkshaon2",
+    "password": "rkshaon"
+}
+
 Login
 {
     "credential": "rkshaon.ist@gmail.com",
+    "password": "rkshaon"
+}
+
+{
+    "credential": "rkshaon.ist2@gmail.com",
     "password": "rkshaon"
 }
 
@@ -29,6 +41,14 @@ URL
     "url": "https://www.linkedin.com/in/rkshaon/"
 }
 
+{
+    "url": "https://www.linkedin.com/in/rkshaon/",
+    "expiry": "300",
+    "custom": "chilp.it",
+    "private": "true"
+}
+
+
 Short URL
 {
     "short_url": "https://tinyurl.com/2ldqkzdv"
@@ -43,4 +63,13 @@ Short URL
 }
 {
     "short_url": "https://tinyurl.com/2zntlvkx"
+}
+
+{
+    "short_url": "http://chilp.it/403980e",
+    "url": "https://www.linkedin.com/in/rkshaon/?exe=300&exp=3871722256.742562&private=4"
+}
+
+{
+    "short_url": "http://chilp.it/403980e"
 }

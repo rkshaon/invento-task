@@ -5,6 +5,7 @@ from rest_framework import status
 import datetime
 import pyshorteners as sh
 
+from url_short.utility import auth_user
 
 # more about pyshorteners 1.0.1
 # https://pyshorteners.readthedocs.io/en/latest/
@@ -12,7 +13,7 @@ import pyshorteners as sh
 # Allowed custom URL
 # 1. tinyurl
 # 2. chilp.it
-# 
+# 3. clck.ru
 
 @api_view(['POST'])
 def create_short_url(request):
@@ -21,6 +22,14 @@ def create_short_url(request):
             'status': False,
             'message': 'URL required to create short URL!'
         }, status=status.HTTP_400_BAD_REQUEST)
+
+    user = None
+    private = None
+
+    if 'private' in request.data and (request.data['private'].lower() == 'true' or request.data['private'] == True):
+        user = auth_user(request)
+        # print('user: ', user.id)
+        private = user.id
 
     if 'custom' in request.data:
         custom = request.data['custom']
@@ -32,12 +41,20 @@ def create_short_url(request):
     execution_time = (current_time - epoch_time).total_seconds()
 
     if 'expiry' in request.data:
+        if user is None:
+            user = auth_user(request)
+
         duration = int(request.data['expiry'])
     else:
         duration = 3600
 
     url = request.data['url']
     url = url + '?exe=' + str(duration) + '&exp=' + str(execution_time)
+
+    if private is not None:
+        url += '&private=' + str(private)
+    
+    # print(url)
 
     s = sh.Shortener()
 
@@ -50,7 +67,7 @@ def create_short_url(request):
 
     data = {
         'short_url': short_url,
-        # 'url': url,
+        'url': url,
     }
 
     return Response({
@@ -90,6 +107,7 @@ def retrive_short_url(request):
     url_split = url.split('?')[1].split('&')
     url_execution_time = None
     url_duration = None
+    url_private = None
 
     for u in url_split:
         if 'exp' in u:
@@ -97,6 +115,9 @@ def retrive_short_url(request):
         
         if 'exe' in u:
             url_duration = float(u.split('=')[1])
+        
+        if 'private' in u:
+            url_private = u.split('=')[1]
             
     actual_duration = execution_time - url_execution_time
     
@@ -105,6 +126,18 @@ def retrive_short_url(request):
             'status': True,
             'message': 'Link expired!'
         }, status=status.HTTP_410_GONE)
+    
+    if url_private is not None:
+        user = auth_user(request)
+
+        if str(user.id) != url_private:
+            print(type(user.id), user.id)
+            print(type(url_private), url_private)
+
+            return Response({
+                'status': False,
+                'message': 'You are not authorized user to retrive this private URL!'
+            }, status=status.HTTP_406_NOT_ACCEPTABLE)
     
     url = url.split('?')[0]
 
